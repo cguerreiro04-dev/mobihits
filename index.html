@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FitUp7 – Preview</title>
+
+  <!-- Tailwind por CDN para pré-visualização -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      background: white;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .cstm_footer_link { display: none; } /* no Blade tinhas display:none1 (typo) */
+    .main_cntnt{
+      width: 100%;
+      overflow-x: hidden;
+      padding: 4px;
+      margin: 0 auto;
+      position: relative;
+      background-repeat: no-repeat;
+      -webkit-background-position: top;
+      background-position: top;
+      -webkit-background-size: contain;
+      background-size: contain;
+    }
+    .white_img{ width: 10rem; }
+    .bor{ border-radius: 10px; }
+  </style>
+</head>
+<body>
+  <div class="main_cntnt">
+    <p class="font-base text-xs text-stone-400 text-center">
+      Free for 24 hours then AED 3.25 / day (VAT INCLUSIVE)
+    </p>
+
+    <div class="flex items-center justify-center w-full p-4">
+      <div class="w-full max-w-xl">
+
+        <!-- Top grid: menu / logo / language -->
+        <div class="grid grid-cols-3 items-center">
+          <!-- components.menu (stub simples) -->
+          <div class="py-6">
+            <nav class="text-sm">
+              <a href="#" class="px-3 py-1 rounded bg-black text-white">All Content</a>
+            </nav>
+          </div>
+
+          <!-- logo -->
+          <div class="p-2 flex justify-center">
+            <!-- mantém o src original; se não existir, mostramos um fallback -->
+            <img id="logo" src="assets/images/templates/fitup/fitup7_logo.png"
+                 class="w-16 grayscale" alt="FitUp7 logo"
+                 onerror="this.src='https://placehold.co/64x64?text=Logo'">
+          </div>
+
+          <!-- components.language_change (stub) -->
+          <div class="px-3 grid justify-items-end place-items-center">
+            <select id="lang" class="border rounded px-2 py-1 text-sm">
+              <option>EN</option>
+              <option>AR</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Headings -->
+        <div class="mt-1">
+          <div class="text-center">
+            <p class="font-base text-lg text-center step_2_hide">CONTINUE TO GET</p>
+            <p id="phone_otp_text" class="font-extrabold text-xl"></p>
+          </div>
+
+          <div class="text-center mt-2 italic step_2_hide">
+            <p class="font-bold text-xl text-center">
+              <span class="rounded bg-blue-500 text-white px-2 py-1 mr-1">access</span>
+              <span>to your VIP subscription</span>
+            </p>
+          </div>
+
+          <!-- Notification -->
+          <div class="w-full mt-2 text-center relative">
+            <div id="annoying-notification"
+                 style="display:none; width:358px;"
+                 class="absolute left-1/2 -translate-x-1/2 mt-4 z-10 bg-red-400 text-white font-bold px-3 py-2 rounded animate-bounce">
+            </div>
+
+            <!-- icons -->
+            <div class="grid grid-cols-1">
+              <div class="p-2 flex justify-center gap-6">
+                <img id="send_otp_img" class="w-16"
+                     src="assets/images/templates/fitup/check.svg"
+                     alt="check" onerror="this.src='https://placehold.co/64x64?text=✓'">
+                <img id="verify_otp_img" class="hidden h-28"
+                     src="assets/images/templates/black_white_two_download_arrow_blue.png"
+                     alt="arrow" onerror="this.src='https://placehold.co/64x64?text=OTP'">
+              </div>
+            </div>
+
+            <div class="text-center mt-2 italic">
+              <p class="text-sm text-center hidden">The Best Fitness Platform to Train Anywhere!</p>
+            </div>
+
+            <!-- FORM: passo 1 (send) -->
+            <div id="step1" class="w-90 mt-4 rounded-xl border border-stone-200 p-3">
+              <label class="block text-stone-500 font-medium mb-1">Enter your UAE Number</label>
+              <div class="border-2 border-stone-300 p-2 flex rounded-md items-center gap-2">
+                <img src="assets/icons/uae_flag.webp" alt="UAE"
+                     class="w-6 h-4 object-cover"
+                     onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'🇦🇪'}))">
+                <input id="msisdn" type="tel" inputmode="numeric" placeholder="1 (702) 123-4567"
+                       class="w-full bg-transparent outline-none p-1"/>
+                <img src="assets/images/shared/check_blue.png" class="w-5 h-5"
+                     alt="ok" onerror="this.src='https://placehold.co/20x20'">
+              </div>
+              <button id="btn-send" class="w-full rounded-lg py-3 px-4 font-base text-lg mt-5 bg-blue-600 text-white">
+                Subscribe
+              </button>
+              <p class="text-center text-xs text-stone-400 mt-2">
+                By continuing you are agreeing to be communicated promotional offers
+              </p>
+            </div>
+
+            <!-- FORM: passo 2 (verify) -->
+            <div id="step2" class="hidden w-90 mt-4">
+              <label class="block text-stone-500 font-medium mb-1">OTP</label>
+              <div class="border-2 border-blue-400 p-2 flex rounded-md items-center gap-2">
+                <input id="otp" type="tel" inputmode="numeric" maxlength="6"
+                       class="w-full bg-transparent outline-none p-1 text-center font-bold"
+                       placeholder="______"/>
+              </div>
+              <button id="btn-verify" class="w-full rounded-lg py-3 px-4 font-base text-lg mt-5 bg-blue-600 text-white">
+                Subscribe
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <p class="font-base text-xs text-stone-400 text-center">
+      Free for 24 hours then AED 3.25 / day (VAT INCLUSIVE)
+    </p>
+
+    <div class="p-1">
+      <div class="gap-3 text-center text-sm m-3">
+        <a href="https://www.google.com" class="inline-block bg-gray-800 text-white px-2 py-1 text-xs rounded">Exit</a>
+      </div>
+
+      <!-- components.copyrights (stub) -->
+      <div class="mt-2 ml-5 text-stone-500 text-xs">
+        © 2025 FitUp7. All rights reserved.
+      </div>
+
+      <!-- FAQ -->
+      <div class="space-y-2 max-w-md mx-auto mt-7">
+        <details class="group rounded-lg bg-stone-200">
+          <summary class="p-2 cursor-pointer list-none flex justify-between items-center bg-stone-400 rounded">
+            <span class="font-medium">What is FitUp7?</span>
+            <span class="ml-4 transition-transform group-open:rotate-180 text-2xl font-bold">+</span>
+          </summary>
+          <div class="mt-3 text-sm text-gray-700 p-2">
+            FitUp7 is a digital fitness platform offering workouts, nutrition tips, and motivational content,
+            allowing you to train anytime, anywhere.
+          </div>
+        </details>
+
+        <details class="group rounded-lg bg-stone-200">
+          <summary class="p-2 cursor-pointer list-none flex justify-between items-center bg-stone-400 rounded">
+            <span class="font-medium">What Features Are Included?</span>
+            <span class="ml-4 transition-transform group-open:rotate-180 text-2xl font-bold">+</span>
+          </summary>
+          <div class="mt-3 text-sm text-gray-700 p-2 space-y-3">
+            <p><b>Personalized Workouts</b> – Tailored exercises for your level and goals.</p>
+            <p><b>Nutrition Guidance</b>: Tips and meal plans to complement your training.</p>
+            <p><b>Motivational Content</b>: Videos and articles to keep you energized.</p>
+            <p><b>Multi-device Access</b>: Use on mobile phones, tablets, and computers.</p>
+          </div>
+        </details>
+
+        <details class="group rounded-lg bg-stone-200">
+          <summary class="p-2 cursor-pointer list-none flex justify-between items-center bg-stone-400 rounded">
+            <span class="font-medium">What’s the Cost & How to Cancel?</span>
+            <span class="ml-4 transition-transform group-open:rotate-180 text-2xl font-bold">+</span>
+          </summary>
+          <div class="mt-3 text-sm text-gray-700 p-2">
+            <p><b>Price</b>: After a free 24-hour trial, AED 3.25/day (VAT included).</p>
+            <p><b>Cancel Anytime</b>: Text “C FUP” to 1111 to stop your subscription immediately.</p>
+          </div>
+        </details>
+
+        <details class="group rounded-lg bg-stone-200">
+          <summary class="p-2 cursor-pointer list-none flex justify-between items-center bg-stone-400 rounded">
+            <span class="font-medium">Which Devices Are Supported?</span>
+            <span class="ml-4 transition-transform group-open:rotate-180 text-2xl font-bold">+</span>
+          </summary>
+          <div class="mt-3 text-sm text-gray-700 p-2">
+            FitUp7 works on smartphones, tablets, and computers, giving you flexible access anywhere.
+          </div>
+        </details>
+      </div>
+
+      <p class="font-bold text-lg my-6">More Reasons to Join</p>
+      <div class="grid grid-cols-2 gap-4 p-4 mt-2">
+        <div class="bg-stone-200 shadow-md rounded-lg p-2">
+          <h2 class="font-bold text-sm">Train Anywhere</h2>
+          <p class="text-gray-500 text-sm">Access workouts anytime, anywhere.</p>
+        </div>
+        <div class="bg-stone-200 shadow-md rounded-lg p-2">
+          <h2 class="font-bold text-sm">Always Updated</h2>
+          <p class="text-gray-500 text-sm">New workouts and fitness content every week</p>
+        </div>
+        <div class="bg-stone-200 shadow-md rounded-lg p-2">
+          <h2 class="font-bold text-sm">No Commitment</h2>
+          <p class="text-gray-500 text-sm">Cancel whenever you want.</p>
+        </div>
+        <div class="bg-stone-200 shadow-md rounded-lg p-2">
+          <h2 class="font-bold text-sm">Dedicated Support</h2>
+          <p class="text-gray-500 text-sm">Our team is here to help you succeed.</p>
+        </div>
+        <div class="bg-stone-200 shadow-md rounded-lg p-2">
+          <h2 class="font-bold text-sm">Sports & Energy</h2>
+          <p class="text-gray-500 text-sm">Get fitness and sports inspiration in one place.</p>
+        </div>
+        <div class="bg-stone-200 shadow-md rounded-lg p-2">
+          <h2 class="font-bold text-sm">Personalized Progress</h2>
+          <p class="text-gray-500 text-sm">Track your journey and see improvements every step.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS para simular o fluxo (sem Livewire) -->
+  <script>
+    const notif = document.getElementById('annoying-notification');
+    const msisdn = document.getElementById('msisdn');
+    const otp    = document.getElementById('otp');
+    const btnSend = document.getElementById('btn-send');
+    const btnVerify = document.getElementById('btn-verify');
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+    const sendImg = document.getElementById('send_otp_img');
+    const verifyImg = document.getElementById('verify_otp_img');
+    const otpText = document.getElementById('phone_otp_text');
+
+    // validações mínimas para preview
+    function digitsOnly(el){ el.value = el.value.replace(/\D+/g,''); }
+    msisdn?.addEventListener('input', () => {
+      digitsOnly(msisdn);
+      notif.style.display = (msisdn.value.length < 9) ? 'block' : 'none';
+      notif.textContent = 'Please insert a valid phone number';
+    });
+
+    btnSend?.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (!msisdn.value || msisdn.value.length < 9) {
+        notif.style.display = 'block';
+        notif.textContent = 'Please insert a valid phone number';
+        return;
+      }
+      // simula "otp.send.success"
+      document.querySelectorAll('.step_2_hide').forEach(el => el.classList.add('hidden'));
+      verifyImg.classList.remove('hidden');
+      sendImg.classList.add('hidden');
+      otpText.textContent = 'Enter The pin Code received';
+      step1.classList.add('hidden');
+      step2.classList.remove('hidden');
+      notif.style.display = 'none';
+    });
+
+    otp?.addEventListener('input', () => {
+      digitsOnly(otp);
+      if (otp.value.length < 4) {
+        notif.style.display = 'block';
+        notif.textContent = 'Please insert a valid PIN';
+      } else {
+        notif.style.display = 'none';
+      }
+    });
+
+    btnVerify?.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (otp.value.length < 4) {
+        notif.style.display = 'block';
+        notif.textContent = 'Please insert a valid PIN';
+        return;
+      }
+      alert('Subscribed (preview)');
+    });
+  </script>
+</body>
+</html>
